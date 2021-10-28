@@ -1,9 +1,7 @@
 const date = new Date()
 const events = [
-    { start: new Date(2021, 8, 27), finish: new Date(2021, 8, 29), description: 'Big Sale Promotion' }
-    , { start: new Date(2021, 8, 28), finish: new Date(2021, 8, 30), description: '30% OFF' }
-    , { start: new Date(2021, 9, 1), finish: new Date(2021, 9, 3), description: 'Big Sale Promotion' }
-    , { start: new Date(2021, 10, 23), finish: new Date(2021, 10, 26), description: '30% OFF' }
+    { start: new Date(2021, 9, 1), finish: new Date(2021, 9, 14), description: 'Big Sale Promotion' }
+    , { start: new Date(2021, 9, 19), finish: new Date(2021, 9, 23), description: '30% OFF' }
 ]
 
 const renderCalendar = () => {
@@ -15,7 +13,7 @@ const renderCalendar = () => {
             }
         })
     }
-    
+
     date.setDate(1)
 
     const monthDays = document.querySelector('.days')
@@ -43,12 +41,12 @@ const renderCalendar = () => {
 
     document.querySelector('.month h1').innerHTML = months[date.getMonth()]
     document.querySelector('.year h1').innerHTML = date.getFullYear()
-    let days ='', quantityDiv = 0
+    let days = '', quantityDiv = 0
     for (let x = firstDayIndex; x > 0; x--, quantityDiv++) {
         const day = prevLastDay - x + 1
         days += `<div class='prev-date'>${day}</div>`
     }
-   
+
 
     for (let i = 1; i <= lastDay; i++, quantityDiv++) {
         days += `<div>${i}</div>`
@@ -67,7 +65,6 @@ const renderCalendar = () => {
 const renderCalendarAndEvents = () => {
     renderCalendar()
     setEvents()
-
 }
 
 document.querySelector('.prev').addEventListener('click', () => {
@@ -84,12 +81,12 @@ renderCalendarAndEvents()
 
 
 
-function setEvents(){
+function setEvents() {
     let $days = document.querySelectorAll('.days div')
     const firstDate = firstDateOnCalendar($days)
     const lastDate = lastDateOnCalendar($days)
     const events = filterEvents(firstDate, lastDate)
-    if(events.length <= 0){
+    if (events.length <= 0) {
         return
     }
     const $calendar = document.querySelector('.calendar')
@@ -100,17 +97,19 @@ function setEvents(){
         const $event = document.createElement('div')
         $event.classList.add('event_' + i)
         $events.appendChild($event)
-
-
+        const durationDays = duration(e)
+        let fill = 0
+        if (endWeek(e.start) <= e.finish){
+            console.log(endWeek(e.start));
+        } else{
+            console.log(e.finish);
+        }
+       
     })
 
     // let calendarDayRect = document.querySelectorAll('.days div')[0].getBoundingClientRect()
-   
-    
-    
-   
 
-    
+
     // $event1.style.position = 'absolute'
     // $event1.style.top = calendarDayRect.top + 'px'
     // $event1.style.left = calendarDayRect.left + 'px'
@@ -118,6 +117,18 @@ function setEvents(){
     // $event1.style.height = calendarDayRect.height + 'px'
     // $event1.style.backgroundColor = 'red'
     // $events.appendChild($event1)
+}
+
+function drawDiv(x, y, width, height) {
+
+}
+
+function endWeek(date) {
+    return new Date(date.setDate(date.getDate() - (date.getDay()) + 7))
+}
+
+function duration(event) {
+    return new Date(event.finish.getTime() - event.start.getTime()).getDate()
 }
 
 function filterEvents(start, finish) {
@@ -130,20 +141,20 @@ function filterEvents(start, finish) {
     return eventsFind
 }
 
-function firstDateOnCalendar($calendar){
+function firstDateOnCalendar($calendar) {
     const $node = $calendar[0]
-    if($node.classList.contains('prev-date')){        
+    if ($node.classList.contains('prev-date')) {
         return new Date(date.getFullYear(), date.getMonth() - 1, $node.innerHTML)
-    } else{
+    } else {
         return new Date(date.getFullYear(), date.getMonth(), $node.innerHTML)
     }
 }
 
-function lastDateOnCalendar($calendar){
+function lastDateOnCalendar($calendar) {
     const $node = $calendar[$calendar.length - 1]
-    if($node.classList.contains('next-date')){        
+    if ($node.classList.contains('next-date')) {
         return new Date(date.getFullYear(), date.getMonth() + 1, $node.innerHTML)
-    } else{
+    } else {
         return new Date(date.getFullYear(), date.getMonth(), $node.innerHTML)
     }
 }
