@@ -1,7 +1,7 @@
 const date = new Date()
 const events = [
     { start: new Date(2021, 9, 1), finish: new Date(2021, 9, 14), description: 'Big Sale Promotion' }
-    , { start: new Date(2021, 9, 19), finish: new Date(2021, 9, 23), description: '30% OFF' }
+    , { start: new Date(2021, 10, 8), finish: new Date(2022, 12, 12), description: '30% OFF' }
 ]
 
 const renderCalendar = () => {
@@ -64,6 +64,10 @@ const renderCalendar = () => {
 
 const renderCalendarAndEvents = () => {
     renderCalendar()
+    const $deleteContent = document.querySelector('.events')
+    if ($deleteContent) {
+        $deleteContent.remove()
+    }
     setEvents()
 }
 
@@ -82,59 +86,139 @@ renderCalendarAndEvents()
 
 
 function setEvents() {
-    let $days = document.querySelectorAll('.days div')
+    const $calendar = document.querySelector('.calendar')
+    const $days = $calendar.querySelectorAll('.days div')
+
     const firstDate = firstDateOnCalendar($days)
     const lastDate = lastDateOnCalendar($days)
-    const events = filterEvents(firstDate, lastDate)
-    if (events.length <= 0) {
+    debugger
+    const eventsFiltes = filterEvents(firstDate, lastDate)
+
+    if (eventsFiltes.length <= 0) {
         return
     }
-    const $calendar = document.querySelector('.calendar')
+
     const $events = document.createElement('div')
     $events.classList.add('events')
     $calendar.appendChild($events)
-    events.forEach((e, i) => {
+    eventsFiltes.forEach((e, i) => {
         const $event = document.createElement('div')
-        $event.classList.add('event_' + i)
         $events.appendChild($event)
-        const durationDays = duration(e)
-        let fill = 0
-        if (endWeek(e.start) <= e.finish){
-            console.log(endWeek(e.start));
-        } else{
-            console.log(e.finish);
-        }
-       
+        $event.classList.add('event' + (i + 1))
+    debugger
+        let currentDate = new Date(e.start)        
+        let classList = e.start >= firstDate ? ['event-start'] : [];
+        const finishCycle = e.finish < lastDate? e.finish : lastDate
+        do {           
+            let shift = getShift(currentDate)
+            let $currentDate = getNodeCalendar($days, new Date(currentDate), shift)
+
+            if(!$currentDate){
+                currentDate = new Date(firstDate)
+                shift = getShift(currentDate)
+                $currentDate = getNodeCalendar($days, new Date(currentDate), shift)
+            }
+            
+            const paramRect = $currentDate.getBoundingClientRect()
+            if (endWeek(new Date(currentDate)) < e.finish) {
+                const quantityDays = (1 + untilEndWeek(new Date(currentDate)))
+                drawDiv(paramRect.top,
+                    paramRect.left,
+                    paramRect.width * quantityDays,
+                    paramRect.height,
+                    $event,
+                    classList
+                )
+                currentDate.setDate(currentDate.getDate() + quantityDays)
+                classList = []
+            } else {
+                const quantityDays = (differenceInDays(new Date(e.finish), new Date(currentDate)) + 1)
+                drawDiv(paramRect.top,
+                    paramRect.left,
+                    paramRect.width * quantityDays,
+                    paramRect.height,
+                    $event,
+                    [...classList, 'event-finish']
+                )
+                currentDate.setDate(currentDate.getDate() + quantityDays)
+            }
+        } while (currentDate <= finishCycle)
+        return $events
     })
-
-    // let calendarDayRect = document.querySelectorAll('.days div')[0].getBoundingClientRect()
-
-
-    // $event1.style.position = 'absolute'
-    // $event1.style.top = calendarDayRect.top + 'px'
-    // $event1.style.left = calendarDayRect.left + 'px'
-    // $event1.style.width = calendarDayRect.width + 'px'
-    // $event1.style.height = calendarDayRect.height + 'px'
-    // $event1.style.backgroundColor = 'red'
-    // $events.appendChild($event1)
 }
 
-function drawDiv(x, y, width, height) {
+function getShift(currentDate){
+    return currentDate.getMonth() === date.getMonth() ? 0 : currentDate.getMonth() >= date.getMonth() && currentDate.getFullYear() >=  date.getFullYear() ? 1 : -1
+}
 
+function drawDiv(top, left, width, height, $event, classList) {
+    const $div = document.createElement('div')
+    $event.appendChild($div)
+    $div.style.position = 'absolute'
+    $div.style.top = top + 'px'
+    $div.style.left = left + 'px'
+    $div.style.width = width + 'px'
+    $div.style.height = height + 'px'
+    $div.style.backgroundColor = 'red'
+    $div.style.opacity = '0.5'
+    $div.classList.add(...classList)
+}
+
+function getNodeCalendar($days, findDate, shiftMonth = 0) {
+    let $resultNode
+
+    if (shiftMonth <= -1) {
+        $days.forEach(d => {
+            if (d.classList.contains('prev-date')) {
+                if (+d.innerHTML === findDate.getDate()) {
+                    $resultNode = d
+                }
+            }
+        })
+    } else if (shiftMonth >= 1) {
+        $days.forEach(d => {
+            if (d.classList.contains('next-date')) {
+                if (+d.innerHTML === findDate.getDate()) {
+                    $resultNode = d
+                }
+            }
+        })
+    } else {
+        $days.forEach(d => {
+            if (!['next-date', 'prev-date'].some(className => d.classList.contains(className))) {
+                if (+d.innerHTML === findDate.getDate()) {
+                    $resultNode = d
+                }
+            }
+        })
+    }
+    if (!$resultNode) {
+        return
+    }
+    return $resultNode
 }
 
 function endWeek(date) {
-    return new Date(date.setDate(date.getDate() - (date.getDay()) + 7))
+    const dayOfWeek = date.getDay() === 0 ? 7 : date.getDay()
+    return new Date(date.setDate(date.getDate() - dayOfWeek + 7))
 }
 
-function duration(event) {
-    return new Date(event.finish.getTime() - event.start.getTime()).getDate()
+function differenceInDays(dateFinish, dateStart) {
+    return (dateFinish.getTime() - dateStart.getTime()) / (1000 * 3600 * 24)
 }
+
+function untilEndWeek(date) {
+    return differenceInDays(endWeek(new Date(date)), new Date(date))
+}
+
+// function duration(event) {
+//     return new Date(event.finish.getTime() - event.start.getTime()).getDate()
+// }
 
 function filterEvents(start, finish) {
     let eventsFind = []
     events.forEach(event => {
-        if (event.start >= start && event.finish <= finish) {
+        if (event.start <= finish && event.finish >= start) {
             eventsFind.push(event)
         }
     })

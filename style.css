@@ -150,7 +150,7 @@ html{
     width: calc(44.6rem/7);
     text-align: center;
     padding-top: 1rem;
-    background: #3F58CF;
+    background-color: #3F58CF;
 }
 
 .event-finish div.finish{
@@ -161,7 +161,7 @@ html{
     width: calc(44.6rem/7);
     text-align: center;
     padding-top: 1rem;
-    background: #3F58CF;
+    background-color: #3F58CF;
 }
 
 .description{
