@@ -1,6 +1,6 @@
 const date = new Date()
 const events = [
-    { start: new Date(2021, 8, 7), finish: new Date(2021, 9, 10), description: 'Big Sale Promotion' }
+    { start: new Date(2021, 9,6), finish: new Date(2021, 9, 10), description: 'Big Sale Promotion' }
     , { start: new Date(2021, 9, 5), finish: new Date(2021, 9, 20), description: '30% OFF' }
 ]
 
@@ -120,7 +120,7 @@ function setEvents() {
             $dateEvent.style.left = left + 'px'
             $dateEvent.style.width = width + 'px'
             $dateEvent.style.height = height + 'px'
-
+            $dateEvent.setAttribute('data-date', currentDate.toDateString())
 
             if (currentDate.getTime() === e.start.getTime()) {
                 $dateEvent.classList.add('event-start')
@@ -139,12 +139,40 @@ function setEvents() {
     })
 
     eventsFiltes.forEach((e, i) => {
-        const $eventsCalendar = $calendar.querySelectorAll('.events > div')[i].querySelectorAll('div')
+        const $event = $calendar.querySelectorAll('.events > div')[i]
+        const $eventsCalendar = $event.querySelectorAll('div')
 
         const daysSuitable = getDatesForDescription(e, i, eventsFiltes, firstDate)
-        console.log(daysSuitable);
-        //const $suitableNodes = getNodesSuitableForDescription($eventsCalendar, i, firstDate, lastDate)
+        if(daysSuitable.length <= 0){
+            console.log('daysSuitable.length <= 0');
+            return
+        }
 
+        let $startNodeForDescription, flag = true
+        $eventsCalendar.forEach(d => {
+            if (daysSuitable.map(d => d.toDateString()).includes(d.dataset.date)) {
+                if (flag) {
+                    $startNodeForDescription = d
+                    flag = false
+                }
+            }
+        })
+
+        const $description = document.createElement('div')
+        $description.classList.add('description')
+        $event.appendChild($description)
+
+        const { top, left, width, height } = $startNodeForDescription.getBoundingClientRect()
+
+        $description.style.position = 'absolute'
+        $description.style.top = top + 'px'
+        $description.style.left = left + 'px'
+        $description.style.width = width * daysSuitable.length + 'px'
+        $description.style.height = height + 'px'
+        $description.innerHTML = e.description
+        if(daysSuitable.length === 1){
+            $description.setAttribute('data-size', 'small')
+        }
     })
 }
 
@@ -183,21 +211,9 @@ function getDatesForDescription(event, indexEvent, filterEvents, firstDateOnCale
     return daysSuitable
 }
 
-function equalDate(date1, date2){
+function equalDate(date1, date2) {
     return date1.getTime() === date2.getTime()
 }
-
-// function getNodesSuitableForDescription($eventsCalendar, indexEvent, firstDate, lastDate){
-//     console.log($eventsCalendar);
-//     const curEvent = events[indexEvent]
-//     let curDate = curEvent.start >= firstDate ? new Date(curEvent.start) : firstDate 
-//     const finishCycle = curEvent.finish <= lastDate ? curEvent.finish : lastDate
-
-//     do{
-
-//     }while(currentDate <= finishCycle)
-
-// }
 
 function addDay(date, quantityDays) {
     const newObj = new Date(date)
