@@ -1,6 +1,6 @@
 const date = new Date()
 const events = [
-    { start: new Date(2021, 9, 2), finish: new Date(2021, 10, 2), description: 'Big Sale Promotion' }
+    { start: new Date(2020, 9, 2), finish: new Date(2021, 10, 2), description: 'Big Sale Promotion' }
     , { start: new Date(2021, 9, 6), finish: new Date(2021, 9, 8), description: '30% OFF' }
     , { start: new Date(2021, 10, 6), finish: new Date(2021, 10, 18), description: '40% OFF' }
     , { start: new Date(2021, 9, 15), finish: new Date(2021, 9, 21), description: '50% OFF' }
@@ -33,7 +33,7 @@ const renderCalendar = () => {
     function today($calendar) {
         document.querySelectorAll('.days div:not(.next-date, .prev-date)').forEach($n => {
             const day = +$n.innerHTML
-            if (day === new Date().getDate() && date.getMonth() === new Date().getMonth()) {
+            if (equalDate(new Date(date.getFullYear(), date.getMonth(), day), new Date(new Date().toDateString()))) {
                 const { top, left, width, height } = $n.getBoundingClientRect()
                 const $square = document.createElement('div')
                 $square.classList.add('today')
@@ -151,7 +151,7 @@ function setEvents() {
 
         const finishCycle = e.finish <= lastDate ? e.finish : lastDate
         let currentDate = e.start >= firstDate ? new Date(e.start) : firstDate
-
+debugger
         do {
             let shift = getShift(currentDate)
             const $dateCalendar = getNodeCalendar($days, new Date(currentDate), shift)
@@ -304,7 +304,8 @@ function equalDate(date1, date2) {
 
 function addDay(date, quantityDays) {
     const newObj = new Date(date)
-    return new Date(newObj.setDate(newObj.getDate() + quantityDays))
+    // Округление до даты  
+    return new Date(new Date(newObj.setDate(newObj.getDate() + quantityDays)).toDateString())
 }
 
 function filterAndSortEvents(start, finish) {
