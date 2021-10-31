@@ -106,12 +106,9 @@ html{
     align-items: center;
     text-shadow: 0 .3rem .5rem rgba(0, 0, 0, .5);
     transition: background-color 0.2s;
-    position: relative;
-    overflow: hidden;
 }
 
 .days > div:hover:not(.today){
-    /* background-color: #aca9a9; */
     border: .2rem solid #777;
     cursor:pointer;
 }
@@ -128,9 +125,21 @@ html{
 
 
 .today{
-    background-color: #F5534E !important;
+    color: #fff;
+    z-index: 10;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.4rem;
+}
+
+.today > div{
     border-radius: 3rem;
-    width: 1rem;
+    background-color: #F5534E;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .event-finish{
@@ -146,7 +155,6 @@ html{
 .event-start, .event-finish{
     display: table;
     text-align: center;
-    background-color: #3F58CF;
     color: #fff;
     font-size: 1.4rem;
 }
@@ -161,13 +169,15 @@ html{
     justify-content: center;
     align-items: center;
     font-size: 1.5rem;    
-    padding-left: 0.4rem;
+    padding: 0 0.4rem;
+    color: #fff;
+    font-weight: 600;
 }
 
 .description[data-size='small']{
     font-size: 1.2rem;
 }
 
-.event{
+/* .event{
     background-color: #E1E7FC;
-}
+} */
