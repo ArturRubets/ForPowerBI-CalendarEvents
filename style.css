@@ -10,18 +10,14 @@ html{
 }
 
 .container{
-    width: 100%;
-    height:100vh;
+    position: relative;
+    width: 916px;
+    height:481px;
     background-color: #12121f;
-    color:#eee;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 .calendar{
-    width:45rem;
-    height:52rem;
+    position: absolute;
     background-color: #FFF;
     box-shadow: 0 0.5rem 3rem rgba(0,0,0,0.4);
     color:#000;
@@ -29,50 +25,57 @@ html{
 
 .month-year{
     width:100%;
-    height:12rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 5rem;
+    height: 17%;
+    position: relative;
+    padding: 0 5%;
     text-align: center;
     text-shadow: 0 0.3rem 0.5rem rgb(0 0 0 / 20%);
 }
 
-.month-year i{
-    font-size: 2.5rem;
-    cursor: pointer;
-}
-
-.month h1{
-    font-size: 2rem;
+.month h1, .year h1{
+    font-size: 1.2rem;
     color: black;
-    letter-spacing: 0.1rem;
 }
 
 .month, .year, .arrow-wrap{
     box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 20%);
     border-radius: 30px;
-    padding: 7px 16px;
+    position: absolute;
+    top: 30%;
+    height: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.arrow-wrap{
-    padding: 7px;
+.year{
+    right: 27%;
+    width: 20%;
 }
 
-.year h1{
-    font-size: 2rem;
-    color: black;
-    letter-spacing: 0.1rem;
+.month{
+    left: 27%;
+    width: 20%;
+}
+
+.next{
+    right: 7%;
+}
+
+.prev{
+    left: 7%;
 }
 
 .next, .prev{
     color: black;
-    opacity: 0.4;
+    opacity: 0.7;
+    cursor: pointer;
+    padding: 0 3%;
 }
 
 .weekdays{
     width: 100%;
-    height: 5rem;
+    height: 15%;
     padding: 0 0.4rem;
     display: flex;
     align-items: center;
@@ -82,7 +85,7 @@ html{
     font-size: 1.5rem;
     font-weight: 400;
     letter-spacing: 0.1rem;
-    width: calc(44.2rem/7);
+    width: calc(100% /7);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -94,14 +97,14 @@ html{
     display: flex;
     flex-wrap: wrap;
     padding: .2rem;
+    height: 68%;
 }
 
 .days div{
     font-size: 1.4rem;
-    width: calc(44.6rem /7);
-    height: 5rem;
+    width: calc(100% /7);
+    height: calc(100% /7);
     display: flex;
-    margin: 0.3rem 0;
     justify-content: space-around;
     align-items: center;
     text-shadow: 0 .3rem .5rem rgba(0, 0, 0, .5);
@@ -126,8 +129,7 @@ html{
 
 .today{
     color: #fff;
-    z-index: 10;
-    position: absolute;
+    position: fixed;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -178,6 +180,6 @@ html{
     font-size: 1.2rem;
 }
 
-/* .event{
-    background-color: #E1E7FC;
-} */
+.events div div{
+    position: fixed;
+}
