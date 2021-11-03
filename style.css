@@ -9,18 +9,57 @@ html{
     font-size: 62.5%;
 }
 
+.header{
+    padding: 0rem 2rem;
+    color: #000;
+    position: absolute;
+    background-color: #FFF;
+    top: 2%;
+    font-weight: 800;
+    font-size: 2rem;
+}
+
 .container{
     position: relative;
-    width: 916px;
+    width: 1000px;
     height:481px;
     background-color: #12121f;
 }
 
-.calendar{
+.slicerCalendar{
+    padding: 3rem 2rem;
+    color: #000;
     position: absolute;
     background-color: #FFF;
-    box-shadow: 0 0.5rem 3rem rgba(0,0,0,0.4);
+    top: 8%;
+    height: 90%;
+    width: 18%;
+}
+
+.slicerCalendar > div{
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    cursor: pointer;
+}
+
+.calendarLeft, .calendarRight{
+    position: absolute;
+    background-color: #FFF;
+    box-shadow: 0 0.5rem 3rem rgba(0,0,0,0.1);
     color:#000;
+    top: 8%;
+    height: 90%;
+}
+
+.calendarRight{
+    left: 59.5%; 
+    width: 40%;
+}
+
+.calendarLeft{
+    left: 18.5%;
+    width: 40%;
 }
 
 .month-year{
@@ -33,12 +72,12 @@ html{
 }
 
 .month h1, .year h1{
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     color: black;
 }
 
 .month, .year, .arrow-wrap{
-    box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 20%);
+    box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%);
     border-radius: 30px;
     position: absolute;
     top: 30%;
@@ -48,14 +87,16 @@ html{
     justify-content: center;
 }
 
+.year, .month{
+    width: 22%;
+}
+
 .year{
-    right: 27%;
-    width: 20%;
+    right: 25%;
 }
 
 .month{
-    left: 27%;
-    width: 20%;
+    left: 25%;
 }
 
 .next{
@@ -82,7 +123,7 @@ html{
 }
 
 .weekdays div{
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     font-weight: 400;
     letter-spacing: 0.1rem;
     width: calc(100% /7);
@@ -170,14 +211,15 @@ html{
     display: flex; 
     justify-content: center;
     align-items: center;
-    font-size: 1.5rem;    
-    padding: 0 0.4rem;
+    font-size: 1.4rem;  
     color: #fff;
     font-weight: 600;
 }
 
 .description[data-size='small']{
     font-size: 1.2rem;
+    justify-content: start;
+    padding: 0 .1rem;
 }
 
 .events div div{
